@@ -11,7 +11,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Tetris</h2>
         </div>
-        <TetrisGame />
+        <TetrisGame cols={10} rows={22}/>
       </div>
     );
   }
