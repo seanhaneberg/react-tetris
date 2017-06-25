@@ -48,7 +48,7 @@ class TetrisGame extends Component {
       function () {
         self.tick();
       },
-      1000);
+      250);
   }
 
   componentWillUnmount() {
@@ -67,20 +67,47 @@ class TetrisGame extends Component {
     return newPiece;
   }
 
+  isBoardPosClear(x, y) {
+    // check bounds
+    if (x < 0 || x > this.props.cols || y < 0 || y >= this.props.rows) {
+       return false;
+       // todo shspaes
+    } else {
+      return true;
+    }
+  }
+
+  checkDown(piece) {
+    var clear = true;
+    var basePos = piece.pos;
+
+    for (var i = 0; i < piece.shape.length; i++) {
+      var x = basePos[0] + piece.shape[i][0];
+      var y = basePos[1] + piece.shape[i][1] + 1;
+
+      if (!this.isBoardPosClear(x, y)) {
+        clear = false;
+        break;
+      }
+    }
+
+    return clear;
+  }
+
+
   tick() {
     let curPiece = this.state.curPiece;
-    if (curPiece) {
+    if (curPiece && this.checkDown(curPiece)) {
       curPiece.pos[1]++;
     } else {
       curPiece = this.createNewPiece();
-      
     }
 
     // Operate on a copy of the array and then queue it with setState
     var pieces = this.state.pieces.slice();
     pieces.push(curPiece);
 
-    this.setState({ 
+    this.setState({
       curPiece: curPiece,
       pieces: pieces
     });
@@ -104,10 +131,10 @@ class TetrisGame extends Component {
 
     return created;
   }
-  
+
   render() {
     let config = this.state.config;
-    let boardMargin = 10;
+    let boardMargin = 20;
     let width = config.playspaceWidth;
     let height = config.playspaceHeight;
     let boardWidth = width + boardMargin;
