@@ -18,11 +18,14 @@ class TetrisPiece extends Component {
     let height = this.props.blockHeight;
     let x = this.props.x;
     let y = this.props.y;
-    let def = this.props.def;
+    let shape = this.props.shape;
 
     var blocks = [];
-    for (var i = 0; i < def.length; i++) {
-      blocks.push(<TetrisBlock key={i} x={x + def[i][0]} y={y + def[i][1]} width={width} height={height} />);
+    for (var i = 0; i < shape.length; i++) {
+      let xPos = x + shape[i][0];
+      let yPos = y + shape[i][1];
+
+      blocks.push(<TetrisBlock key={i} x={xPos} y={yPos} width={width} height={height} />);
     }
 
     return (<g> {blocks} </g>);
