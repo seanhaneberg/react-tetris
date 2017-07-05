@@ -4,15 +4,45 @@ import TetrisPiece from './TetrisPiece.jsx';
 class PieceDefinitions {
   constructor() {
     this.pieces = [
-      [[0, 0], [0, 1], [0, 2], [0, 3]],   // [0] I
-      [[0, 0], [0, 1], [0, 2], [1, 2]],   // [1] L
-      [[0, 0], [1, 0], [0, 1], [0, 2]],   // [2] R (mirror of L)
-      [[0, 0], [1, 0], [1, 1], [2, 1]],   // [3] Z
-      [[0, 0], [0, 1], [1, 1], [1, 2]],   // [4] S (mirror of Z)
-      [[0, 0], [0, 1], [1, 0], [1, 1]],   // [5] X
-      [[0, 0], [0, 1], [0, 2], [1, 1]]    // [6] T
+      [
+        [[1, 0], [1, 1], [1, 2], [1, 3]],
+        [[1, 1], [1, 1], [2, 1], [3, 1]]
+      ], // I piece rotations
+      [
+        [[1, 0], [1, 1], [1, 2], [2, 2]],
+        [[0, 1], [1, 1], [1, 2], [1, 0]],
+        [[1, 2], [1, 1], [1, 0], [0, 0]],
+        [[0, 1], [1, 1], [0, 2], [2, 1]]
+      ],   // [1] L
+      [
+        [[0, 0], [1, 0], [0, 1], [0, 2]],
+        [[0, 0], [1, 0], [0, 1], [0, 2]],
+        [[0, 0], [1, 0], [0, 1], [0, 2]],
+        [[0, 0], [1, 0], [0, 1], [0, 2]]
+      ],   // [2] R (mirror of L)
+      [
+        [[0, 0], [1, 0], [1, 1], [2, 1]],
+        [[0, 0], [1, 0], [1, 1], [2, 1]]
+      ],   // [3] Z
+      [
+        [[0, 0], [0, 1], [1, 1], [1, 2]],
+        [[0, 0], [0, 1], [1, 1], [1, 2]]
+      ],   // [4] S (mirror of Z)
+      [
+        [[0, 0], [0, 1], [1, 0], [1, 1]]
+      ],   // [5] X
+      [
+        [[1, 0], [1, 1], [1, 2], [0, 1]],
+        [[0, 1], [1, 1], [1, 1], [1, 0]],
+        [[1, 0], [1, 1], [1, 2], [2, 1]],
+        [[0, 1], [1, 1], [1, 1], [1, 2]]
+      ]    // [6] T
     ];
   }
+
+
+
+
 }
 
 class GameConfiguration {
@@ -58,10 +88,11 @@ class TetrisGame extends Component {
   createNewPiece() {
     let defs = this.state.pieceDefinitions.pieces;
     var defIndex = Math.floor(Math.random() * defs.length);
+    var rotation = Math.floor(Math.random() * defs[defIndex].length);
 
     var newPiece = {
       pos: [4, 0],
-      shape: defs[defIndex]
+      shape: defs[defIndex][rotation]
     };
 
     return newPiece;
@@ -70,8 +101,8 @@ class TetrisGame extends Component {
   isBoardPosClear(x, y) {
     // check bounds
     if (x < 0 || x > this.props.cols || y < 0 || y >= this.props.rows) {
-       return false;
-       // todo shspaes
+      return false;
+      // todo shapes
     } else {
       return true;
     }
