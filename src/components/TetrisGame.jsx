@@ -53,6 +53,12 @@ class GameConfiguration {
     this.playspaceWidth = this.blockWidth * this.columnCount;
     this.playspaceHeight = this.blockHeight * this.rowCount;
 
+    this.piecePallet = [
+      "#FF0000",
+      "#00FF00",
+      "#0000FF",
+    ];
+
     this.enableBonusBlocks = false;
   }
 }
@@ -86,11 +92,13 @@ class TetrisGame extends Component {
 
   createNewPiece() {
     let defs = this.state.pieceDefinitions.pieces;
+    let piecePallet = this.state.config.piecePallet;
     var defIndex = Math.floor(Math.random() * defs.length);
     var rotation = Math.floor(Math.random() * defs[defIndex].length);
+    let colorIndex = Math.floor(Math.random() * piecePallet.length);
 
     var newPiece = {
-      color: "#0000FF",
+      color: piecePallet[colorIndex],
       pos: { x: 4, y: 0 },
       shape: defs[defIndex][rotation]
     };
