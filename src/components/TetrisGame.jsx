@@ -108,6 +108,32 @@ class TetrisGame extends Component {
     }
   }
 
+  getOccupyingPiece(pos) {
+    var occupier = null; 
+    for (var i in this.state.pieces) {
+      let piece = this.state.pieces[i];
+      let basePos = piece.pos;
+      for (var j in piece.shape) {
+        let part = piece.shape[j];
+        let x = basePos.x + part[0];
+        let y = basePos.y + part[1];
+
+        if (pos.x === x && pos.y === y) {
+          occupier = piece;
+          break;
+        }
+
+      }
+
+      // If the inner-loop sets occupier, there's no more work to do.
+      if (occupier) {
+        break;
+      }
+    }
+
+    return occupier;
+  }
+
   checkDown(piece) {
     var clear = true;
     var basePos = piece.pos;
@@ -123,6 +149,14 @@ class TetrisGame extends Component {
         clear = false;
         break;
       }
+
+      let occupier = this.getOccupyingPiece(pos);
+      if (occupier !== null && occupier !== piece) {
+        // If some other piece already occupied that space, we're not clear.
+        clear = false;
+        break;
+      }
+
     }
 
     return clear;
