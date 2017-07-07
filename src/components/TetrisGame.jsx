@@ -90,6 +90,7 @@ class TetrisGame extends Component {
     var rotation = Math.floor(Math.random() * defs[defIndex].length);
 
     var newPiece = {
+      color: "#0000FF",
       pos: { x: 4, y: 0 },
       shape: defs[defIndex][rotation]
     };
@@ -196,11 +197,22 @@ class TetrisGame extends Component {
     let blockHeight = config.blockHeight;
 
     for (var i = 0; i < pieces.length; i++) {
-      let curPiece = pieces[i]
+      let curPiece = pieces[i];
       let shape = curPiece.shape;
-      let x = curPiece.pos.x
-      let y = curPiece.pos.y
-      created.push(<TetrisPiece key={i} shape={shape} x={x} y={y} blockWidth={blockWidth} blockHeight={blockHeight} />);
+      let x = curPiece.pos.x;
+      let y = curPiece.pos.y;
+      let stroke = "#000000";
+      let fill = curPiece.color;
+      created.push(<TetrisPiece   key={i} 
+                                  shape={shape} 
+                                  x={x} 
+                                  y={y} 
+                                  blockWidth={blockWidth} 
+                                  blockHeight={blockHeight} 
+                                  stroke={stroke}
+                                  fill={fill}
+                                  />
+                                  );
     }
 
     return created;
