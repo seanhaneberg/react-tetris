@@ -6,7 +6,7 @@ class PieceDefinitions {
     this.pieces = [
       [
         [[1, 0], [1, 1], [1, 2], [1, 3]],
-        [[1, 1], [1, 1], [2, 1], [3, 1]]
+        [[0, 1], [1, 1], [2, 1], [3, 1]]
       ], // I piece rotations
       [
         [[1, 0], [1, 1], [1, 2], [2, 2]],
@@ -33,9 +33,9 @@ class PieceDefinitions {
       ],   // [5] X
       [
         [[1, 0], [1, 1], [1, 2], [0, 1]],
-        [[0, 1], [1, 1], [1, 1], [1, 0]],
+        [[0, 1], [1, 1], [2, 1], [1, 0]],
         [[1, 0], [1, 1], [1, 2], [2, 1]],
-        [[0, 1], [1, 1], [1, 1], [1, 2]]
+        [[0, 1], [1, 1], [1, 0], [1, 2]]
       ]    // [6] T
     ];
   }
@@ -73,7 +73,9 @@ class TetrisGame extends Component {
     var self = this;
     this.timer = setInterval(
       function () {
-        self.tick();
+        if (self.state && !self.state.gameOver) {
+          self.tick();
+        }
       },
       250);
   }
@@ -169,6 +171,10 @@ class TetrisGame extends Component {
       curPiece.pos.y++;
     } else {
       curPiece = this.createNewPiece();
+      if (!this.checkDown(curPiece)) { 
+        // game over!
+        this.setState({ gameOver: true });
+      }
     }
 
     // Operate on a copy of the array and then queue it with setState
@@ -211,13 +217,14 @@ class TetrisGame extends Component {
     let pieces = this.state.pieces;
     let renderedPieces = this.createPiecesJSX(pieces);
 
-    // <TetrisPiece def={def} x={0} y={0} blockWidth={blockWidth} blockHeight={blockHeight} />
-    // TODO: Move <rect> to its own react component
-    // TODO: Keep a list of all pieces and render them all.
+    let board = <rect x="0" y="0" width={width} height={height} fill="#888888" />;
+    let gameOver = this.state.gameOver ? <p> GAME OVER </p> : <p></p>;
+
     return (
       <g>
+        {gameOver}
         <svg width={boardWidth} height={boardHeight}>
-          <rect x="0" y="0" width={width} height={height} fill="#888888" />
+          {board}
           {renderedPieces}
         </svg>
       </g>
