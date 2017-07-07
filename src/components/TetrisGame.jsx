@@ -40,9 +40,6 @@ class PieceDefinitions {
     ];
   }
 
-
-
-
 }
 
 class GameConfiguration {
@@ -91,14 +88,17 @@ class TetrisGame extends Component {
     var rotation = Math.floor(Math.random() * defs[defIndex].length);
 
     var newPiece = {
-      pos: [4, 0],
+      pos: { x: 4, y: 0 },
       shape: defs[defIndex][rotation]
     };
 
     return newPiece;
   }
 
-  isBoardPosClear(x, y) {
+  isBoardPosClear(pos) {
+    let x = pos.x;
+    let y = pos.y
+
     // check bounds
     if (x < 0 || x > this.props.cols || y < 0 || y >= this.props.rows) {
       return false;
@@ -113,10 +113,13 @@ class TetrisGame extends Component {
     var basePos = piece.pos;
 
     for (var i = 0; i < piece.shape.length; i++) {
-      var x = basePos[0] + piece.shape[i][0];
-      var y = basePos[1] + piece.shape[i][1] + 1;
 
-      if (!this.isBoardPosClear(x, y)) {
+      var pos = {
+        x: basePos.x + piece.shape[i][0],
+        y: basePos.y + piece.shape[i][1] + 1
+      };
+
+      if (!this.isBoardPosClear(pos)) {
         clear = false;
         break;
       }
@@ -129,7 +132,7 @@ class TetrisGame extends Component {
   tick() {
     let curPiece = this.state.curPiece;
     if (curPiece && this.checkDown(curPiece)) {
-      curPiece.pos[1]++;
+      curPiece.pos.y++;
     } else {
       curPiece = this.createNewPiece();
     }
@@ -155,8 +158,8 @@ class TetrisGame extends Component {
     for (var i = 0; i < pieces.length; i++) {
       let curPiece = pieces[i]
       let shape = curPiece.shape;
-      let x = curPiece.pos[0];
-      let y = curPiece.pos[1];
+      let x = curPiece.pos.x
+      let y = curPiece.pos.y
       created.push(<TetrisPiece key={i} shape={shape} x={x} y={y} blockWidth={blockWidth} blockHeight={blockHeight} />);
     }
 
