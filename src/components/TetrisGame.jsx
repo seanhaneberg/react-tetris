@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TetrisPiece from './TetrisPiece.jsx';
+import TetrisController from './TetrisController.jsx';
 
 class PieceDefinitions {
   constructor() {
@@ -56,7 +57,7 @@ class GameConfiguration {
     this.piecePallet = [
       "#FF0000",
       "#00FF00",
-      "#0000FF",
+      "#0000FF"
     ];
 
     this.enableBonusBlocks = false;
@@ -73,6 +74,8 @@ class TetrisGame extends Component {
       pieces: [],
       curPiece: null
     };
+
+    this.controller = <TetrisController game={this} />
   }
 
   componentDidMount() {
@@ -88,6 +91,22 @@ class TetrisGame extends Component {
 
   componentWillUnmount() {
     clearInterval(this.timer);
+  }
+
+  moveLeft() {
+    console.log("move left!!");
+  }
+
+  moveRight() {
+    console.log("move right!!");
+  }
+
+  rotateLeft() {
+    console.log("rotate left!!");
+  }
+
+  rotateRight() {
+    console.log("rotate right!!");
   }
 
   createNewPiece() {
@@ -120,7 +139,7 @@ class TetrisGame extends Component {
   }
 
   getOccupyingPiece(pos) {
-    var occupier = null; 
+    var occupier = null;
     for (var i in this.state.pieces) {
       let piece = this.state.pieces[i];
       let basePos = piece.pos;
@@ -180,7 +199,7 @@ class TetrisGame extends Component {
       curPiece.pos.y++;
     } else {
       curPiece = this.createNewPiece();
-      if (!this.checkDown(curPiece)) { 
+      if (!this.checkDown(curPiece)) {
         // game over!
         this.setState({ gameOver: true });
       }
@@ -211,16 +230,16 @@ class TetrisGame extends Component {
       let y = curPiece.pos.y;
       let stroke = "#000000";
       let fill = curPiece.color;
-      created.push(<TetrisPiece   key={i} 
-                                  shape={shape} 
-                                  x={x} 
-                                  y={y} 
-                                  blockWidth={blockWidth} 
-                                  blockHeight={blockHeight} 
-                                  stroke={stroke}
-                                  fill={fill}
-                                  />
-                                  );
+      created.push(<TetrisPiece key={i}
+        shape={shape}
+        x={x}
+        y={y}
+        blockWidth={blockWidth}
+        blockHeight={blockHeight}
+        stroke={stroke}
+        fill={fill}
+      />
+      );
     }
 
     return created;
@@ -240,8 +259,10 @@ class TetrisGame extends Component {
     let board = <rect x="0" y="0" width={width} height={height} fill="#888888" />;
     let gameOver = this.state.gameOver ? <p> GAME OVER </p> : <p></p>;
 
+    let controller = this.controller;
     return (
       <g>
+        {controller}
         {gameOver}
         <svg width={boardWidth} height={boardHeight}>
           {board}
