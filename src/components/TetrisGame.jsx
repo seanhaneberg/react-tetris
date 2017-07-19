@@ -5,40 +5,13 @@ import TetrisController from './TetrisController.jsx';
 class PieceDefinitions {
   constructor() {
     this.pieces = [
-      [
-        [[1, 0], [1, 1], [1, 2], [1, 3]],
-        [[0, 1], [1, 1], [2, 1], [3, 1]]
-      ], // I piece rotations
-      [
-        [[1, 0], [1, 1], [1, 2], [2, 2]],
-        [[0, 1], [1, 1], [1, 2], [1, 0]],
-        [[1, 2], [1, 1], [1, 0], [0, 0]],
-        [[0, 1], [1, 1], [0, 2], [2, 1]]
-      ],   // [1] L
-      [
-        [[0, 0], [1, 0], [0, 1], [0, 2]],
-        [[0, 0], [1, 0], [0, 1], [0, 2]],
-        [[0, 0], [1, 0], [0, 1], [0, 2]],
-        [[0, 0], [1, 0], [0, 1], [0, 2]]
-      ],   // [2] R (mirror of L)
-      [
-        [[0, 0], [1, 0], [1, 1], [2, 1]],
-        [[0, 0], [1, 0], [1, 1], [2, 1]]
-      ],   // [3] Z
-      [
-        [[0, 0], [0, 1], [1, 1], [1, 2]],
-        [[0, 0], [0, 1], [1, 1], [1, 2]]
-      ],   // [4] S (mirror of Z)
-      [
-        [[0, 0], [0, 1], [1, 0], [1, 1]]
-      ],   // [5] X
-      [
-        [[1, 0], [1, 1], [1, 2], [0, 1]],
-        [[0, 1], [1, 1], [2, 1], [1, 0]],
-        [[1, 0], [1, 1], [1, 2], [2, 1]],
-        [[0, 1], [1, 1], [1, 0], [1, 2]]
-      ]    // [6] T
-    ];
+      [[1, 0], [1, 1], [1, 2], [1, 3]],     // [0] I
+      [[1, 0], [1, 1], [1, 2], [2, 2]],     // [1] L
+      [[0, 0], [1, 0], [0, 1], [0, 2]],     // [2] R (mirror of L)
+      [[0, 0], [1, 0], [1, 1], [2, 1]],     // [3] Z
+      [[0, 0], [0, 1], [1, 1], [1, 2]],     // [4] S (mirror of Z)
+      [[0, 0], [0, 1], [1, 0], [1, 1]],     // [5] X
+      [[1, 0], [1, 1], [1, 2], [0, 1]]]     // [6] T
   }
 }
 
@@ -193,21 +166,18 @@ class TetrisGame extends Component {
 
   rotateLeft() {
     let piece = this.state.curPiece;
-    var basePos = piece.pos;
     if (piece && this.checkLeftRot(piece)) {
       for (var i = 0; i < piece.shape.length; i++) {
         var x = piece.shape[i][0];
         piece.shape[i][0] = -(piece.shape[i][1]);
         piece.shape[i][1] = x;
       }
-
       this.setState({ curPiece: piece });
     }
   }
 
   rotateRight() {
     let piece = this.state.curPiece;
-    var basePos = piece.pos;
     if (piece && this.checkLeftRot(piece)) {
       for (var i = 0; i < piece.shape.length; i++) {
         var x = piece.shape[i][0];
@@ -223,13 +193,12 @@ class TetrisGame extends Component {
     let defs = this.state.pieceDefinitions.pieces;
     let piecePallet = this.state.config.piecePallet;
     var defIndex = Math.floor(Math.random() * defs.length);
-    var rotation = Math.floor(Math.random() * defs[defIndex].length);
     let colorIndex = Math.floor(Math.random() * piecePallet.length);
 
     var newPiece = {
       color: piecePallet[colorIndex],
       pos: { x: 4, y: 0 },
-      shape: defs[defIndex][rotation]
+      shape: defs[defIndex]
     };
 
     return newPiece;
