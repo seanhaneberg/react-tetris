@@ -40,7 +40,6 @@ class PieceDefinitions {
       ]    // [6] T
     ];
   }
-
 }
 
 class GameConfiguration {
@@ -120,6 +119,60 @@ class TetrisGame extends Component {
     return clear;
   }
 
+  checkRightRot(piece) {
+    var clear = true;
+    var basePos = piece.pos;
+
+    for (var i = 0; i < piece.shape.length; i++) {
+
+      var pos = {
+        x: basePos.x + (piece.shape[i][1]),
+        y: basePos.y - (piece.shape[i][0])
+      }
+
+      if (!this.isBoardPosClear(pos)) {
+        clear = false;
+        break;
+      }
+
+      let occupier = this.getOccupyingPiece(pos);
+      if (occupier !== null && occupier !== piece) {
+        // If some other piece already occupied that space, we're not clear.
+        clear = false;
+        break;
+      }
+    }
+
+    return clear;
+  }
+
+  checkLeftRot(piece) {
+    var clear = true;
+    var basePos = piece.pos;
+
+    for (var i = 0; i < piece.shape.length; i++) {
+
+      var pos = {
+        x: basePos.x - (piece.shape[i][1]),
+        y: basePos.y + (piece.shape[i][0])
+      }
+
+      if (!this.isBoardPosClear(pos)) {
+        clear = false;
+        break;
+      }
+
+      let occupier = this.getOccupyingPiece(pos);
+      if (occupier !== null && occupier !== piece) {
+        // If some other piece already occupied that space, we're not clear.
+        clear = false;
+        break;
+      }
+    }
+
+    return clear;
+  }
+
   movePieceByDir(piece, dir) {
     if (piece && this.checkDir(piece, dir)) {
       piece.pos.x += dir.x;
@@ -139,11 +192,31 @@ class TetrisGame extends Component {
   }
 
   rotateLeft() {
-    console.log("rotate left!!");
+    let piece = this.state.curPiece;
+    var basePos = piece.pos;
+    if (piece && this.checkLeftRot(piece)) {
+      for (var i = 0; i < piece.shape.length; i++) {
+        var x = piece.shape[i][0];
+        piece.shape[i][0] = -(piece.shape[i][1]);
+        piece.shape[i][1] = x;
+      }
+
+      this.setState({ curPiece: piece });
+    }
   }
 
   rotateRight() {
-    console.log("rotate right!!");
+    let piece = this.state.curPiece;
+    var basePos = piece.pos;
+    if (piece && this.checkLeftRot(piece)) {
+      for (var i = 0; i < piece.shape.length; i++) {
+        var x = piece.shape[i][0];
+        piece.shape[i][0] = (piece.shape[i][1]);
+        piece.shape[i][1] = -x;
+      }
+
+      this.setState({ curPiece: piece });
+    }
   }
 
   createNewPiece() {
