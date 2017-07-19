@@ -93,12 +93,49 @@ class TetrisGame extends Component {
     clearInterval(this.timer);
   }
 
+  checkDir(piece, dir) {
+    var clear = true;
+    var basePos = piece.pos;
+
+    for (var i = 0; i < piece.shape.length; i++) {
+
+      var pos = {
+        x: basePos.x + piece.shape[i][0] + dir.x,
+        y: basePos.y + piece.shape[i][1] + dir.y
+      };
+
+      if (!this.isBoardPosClear(pos)) {
+        clear = false;
+        break;
+      }
+
+      let occupier = this.getOccupyingPiece(pos);
+      if (occupier !== null && occupier !== piece) {
+        // If some other piece already occupied that space, we're not clear.
+        clear = false;
+        break;
+      }
+    }
+
+    return clear;
+  }
+
+  movePieceByDir(piece, dir) {
+    if (piece && this.checkDir(piece, dir)) {
+      piece.pos.x += dir.x;
+      piece.pos.y += dir.y;
+      this.setState({ curPiece: piece });
+    }
+  }
+
   moveLeft() {
-    console.log("move left!!");
+    var dir = { x: -1, y: 0 };
+    return this.movePieceByDir(this.state.curPiece, dir);
   }
 
   moveRight() {
-    console.log("move right!!");
+    var dir = { x: 1, y: 0 };
+    return this.movePieceByDir(this.state.curPiece, dir);
   }
 
   rotateLeft() {
@@ -165,31 +202,7 @@ class TetrisGame extends Component {
   }
 
   checkDown(piece) {
-    var clear = true;
-    var basePos = piece.pos;
-
-    for (var i = 0; i < piece.shape.length; i++) {
-
-      var pos = {
-        x: basePos.x + piece.shape[i][0],
-        y: basePos.y + piece.shape[i][1] + 1
-      };
-
-      if (!this.isBoardPosClear(pos)) {
-        clear = false;
-        break;
-      }
-
-      let occupier = this.getOccupyingPiece(pos);
-      if (occupier !== null && occupier !== piece) {
-        // If some other piece already occupied that space, we're not clear.
-        clear = false;
-        break;
-      }
-
-    }
-
-    return clear;
+    return this.checkDir(piece, { x: 0, y: 1 });
   }
 
 

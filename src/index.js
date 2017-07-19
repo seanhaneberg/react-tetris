@@ -4,5 +4,9 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+var specialOnKeyUp = function(e) {
+    console.log("woooooooo!!!\n\n\n!");
+}
+
+ReactDOM.render(<App onKeyUp={specialOnKeyUp}/>, document.getElementById('root'));
 registerServiceWorker();

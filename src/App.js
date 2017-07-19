@@ -1,6 +1,4 @@
-import React, {
-  Component
-} from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import TetrisGame from './components/TetrisGame.jsx'
@@ -18,6 +16,15 @@ class App extends Component {
     this.controller = < TetrisController game={this.game} />
   }
 
+
+  componentWillMount() {
+    document.body.addEventListener("keyup", this.onKeyUp);
+  }
+
+  componentWillUmount() {
+    document.body.removeEventListener("keyup", this.onKeyUp);
+  }
+
   attachRef(ref) {
     this.gameRef = ref;
   }
@@ -30,16 +37,17 @@ class App extends Component {
   }
 
   onKeyUp(e) {
-    // todo: tell the controller instead?
     let c = e.which;
     if (this.gameRef && this.isMoveLeftKey(c)) {
       this.gameRef.moveLeft();
     } else if (this.isMoveRightKey(c)) {
       console.log("app move right!");
+      this.gameRef.moveRight();
     } else if (this.isRotateLeftKey(c)) {
       console.log("app rotate left!");
+      this.gameRef.rotateLeft();
     } else if (this.isRotateRightKey(c)) {
-      console.log("app rotate right!");
+      this.gameRef.rotateRight();
     } else {
       console.log("app ignorable key!");
     }
@@ -62,14 +70,12 @@ class App extends Component {
   }
 
   render() {
-    let handler = this.onKeyUp;
     return (
-      <div className="App">
+      <div onKeyUp={this.onKeyUp} className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Tetris</h2>
         </div>
-        <div onKeyUp={handler} contentEditable={true} />
         {this.gameJSX}
       </div>
     );
