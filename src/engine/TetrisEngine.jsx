@@ -1,4 +1,4 @@
-import TetrisDefinitions from './TetrisDefinitions.js'
+import TetrisDefinitions from './TetrisDefinitions';
 
 class TetrisEngine {
     constructor() {
@@ -21,7 +21,7 @@ class TetrisEngine {
 
     emitTetrisEvent(eventName, data) {
         for (var i = 0; i < this.listeners.length; i++) {
-            this.listeners[i].onTetrisEvent(eventName, data);
+            this.listeners[i](eventName, data);
         }
     }
 
